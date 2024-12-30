@@ -27,7 +27,7 @@ Pero si pusheaste imágenes git repack no las borrará. Para borrar esa informac
 Will this get rid of binary data that is orphaned in my repo? “git repack” will not git rid of images or binary data that you have checked into your repo and then deleted it. To delete those kind of data permanently from your repo you have to re-write your history. A common example of that is when you accidentally check in your passwords in git. You can go back and delete some files but then you have to re-write your history from then to now and then force push then new repo to your origin.">
   <meta itemprop="datePublished" content="2024-12-29T08:12:00-03:00">
   <meta itemprop="dateModified" content="2024-12-29T08:12:00-03:00">
-  <meta itemprop="wordCount" content="307">
+  <meta itemprop="wordCount" content="404">
   <meta itemprop="keywords" content="Git">
   
   <meta name="twitter:card" content="summary">
@@ -126,6 +126,16 @@ Will this get rid of binary data that is orphaned in my repo? &ldquo;git repack&
 </span></span></code></pre></div><p>Finally, all changes are completed on your local repository, and force update your remote repository:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git push -f origin main
 </span></span></code></pre></div><p>PS: This will not keep your old commit history around. Now you should only see your new commit in the history of your git repository.</p>
+<h3 id="otra-opción-es-borrar-la-carpeta-git">Otra opción es borrar la carpeta <code>.git</code></h3>
+<p>If you are sure you want to remove all commit history, simply delete the .git directory in your project root (note that it&rsquo;s hidden). Then initialize a new repository in the same folder and link it to the GitHub repository:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git init
+</span></span><span style="display:flex;"><span>git remote add origin git@github.com:user/repo
+</span></span></code></pre></div><p>now commit your current version of code</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git add *
+</span></span><span style="display:flex;"><span>git commit -am <span style="color:#e6db74">&#39;message&#39;</span>
+</span></span></code></pre></div><p>and finally force the update to GitHub:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git push -f origin master
+</span></span></code></pre></div><p>However, I suggest backing up the history (the .git folder in the repository) before taking these steps!</p>
 
 </div>
 
