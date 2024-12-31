@@ -2,16 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://imlauera.github.io/</loc>
+    <lastmod>2024-12-31T12:10:19-03:00</lastmod>
+  </url><url>
+    <loc>https://imlauera.github.io/tags/python/</loc>
+    <lastmod>2024-12-31T12:10:19-03:00</lastmod>
+  </url><url>
+    <loc>https://imlauera.github.io/pip/</loc>
+    <lastmod>2024-12-31T12:10:19-03:00</lastmod>
+  </url><url>
+    <loc>https://imlauera.github.io/tags/</loc>
+    <lastmod>2024-12-31T12:10:19-03:00</lastmod>
+  </url><url>
     <loc>https://imlauera.github.io/contribuir_gnu/</loc>
     <lastmod>2024-12-30T16:59:27-03:00</lastmod>
   </url><url>
     <loc>https://imlauera.github.io/tags/gnu/</loc>
-    <lastmod>2024-12-30T16:59:27-03:00</lastmod>
-  </url><url>
-    <loc>https://imlauera.github.io/</loc>
-    <lastmod>2024-12-30T16:59:27-03:00</lastmod>
-  </url><url>
-    <loc>https://imlauera.github.io/tags/</loc>
     <lastmod>2024-12-30T16:59:27-03:00</lastmod>
   </url><url>
     <loc>https://imlauera.github.io/tags/esp32/</loc>
