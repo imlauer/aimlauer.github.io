@@ -11,6 +11,7 @@
   <meta property="og:title" content="Subir capturas con una esp32 webcam a google drive">
   <meta property="og:description" content="Creo que hay mejores tutoriales que este, por ejemplo enviar las fotos por Telegram, o por correo, o usar firebase. Acá algunos links:
 https://randomnerdtutorials.com/page/5/?s=ESP32-CAM https://randomnerdtutorials.com/esp32-cam-save-picture-firebase-storage/ https://randomnerdtutorials.com/esp32-cam-send-photos-email/ https://randomnerdtutorials.com/telegram-esp32-cam-photo-arduino/ https://randomnerdtutorials.com/esp32-cam-post-image-photo-server/ https://randomnerdtutorials.com/esp32-cam-http-post-php-arduino/ https://randomnerdtutorials.com/esp32-cam-photo-microsd-card-timestamp/ https://randomnerdtutorials.com/esp32-cam-robotics-opencv-autonomous/ https://randomnerdtutorials.com/esp32-cam-display-pictures-firebase-web-app/ https://randomnerdtutorials.com/esp32-cam-connect-external-antenna/ https://randomnerdtutorials.com/send-notifications-esp32/ https://randomnerdtutorials.com/firebase-control-esp32-gpios/
+Disabling brownout: https://www.robmiles.com/journal/2020/1/20/disabling-the-esp32-brownout-detector
 Me compré una cámara ESP32 CAM de MercadoLibre y seguí esta guía para subir las fotos a google drive. https://web.archive.org/web/20230608061848/https://www.gsampallo.com/2019/10/13/esp32-cam-subir-fotos-a-google-drive/. Backup: https://archive.is/ABArm
 Se usa google script. Hice un pequeño cambio en el código agregué sensores para que la cámara tenga una mejor calidad cuando hay mucha luz o poca luz y forcé el http en lugar del https porque no funcionaba con el siguiente parámetro: client.setInsecure();">
   <meta property="og:locale" content="es_es">
@@ -28,17 +29,19 @@ Se usa google script. Hice un pequeño cambio en el código agregué sensores pa
   <meta itemprop="name" content="Subir capturas con una esp32 webcam a google drive">
   <meta itemprop="description" content="Creo que hay mejores tutoriales que este, por ejemplo enviar las fotos por Telegram, o por correo, o usar firebase. Acá algunos links:
 https://randomnerdtutorials.com/page/5/?s=ESP32-CAM https://randomnerdtutorials.com/esp32-cam-save-picture-firebase-storage/ https://randomnerdtutorials.com/esp32-cam-send-photos-email/ https://randomnerdtutorials.com/telegram-esp32-cam-photo-arduino/ https://randomnerdtutorials.com/esp32-cam-post-image-photo-server/ https://randomnerdtutorials.com/esp32-cam-http-post-php-arduino/ https://randomnerdtutorials.com/esp32-cam-photo-microsd-card-timestamp/ https://randomnerdtutorials.com/esp32-cam-robotics-opencv-autonomous/ https://randomnerdtutorials.com/esp32-cam-display-pictures-firebase-web-app/ https://randomnerdtutorials.com/esp32-cam-connect-external-antenna/ https://randomnerdtutorials.com/send-notifications-esp32/ https://randomnerdtutorials.com/firebase-control-esp32-gpios/
+Disabling brownout: https://www.robmiles.com/journal/2020/1/20/disabling-the-esp32-brownout-detector
 Me compré una cámara ESP32 CAM de MercadoLibre y seguí esta guía para subir las fotos a google drive. https://web.archive.org/web/20230608061848/https://www.gsampallo.com/2019/10/13/esp32-cam-subir-fotos-a-google-drive/. Backup: https://archive.is/ABArm
 Se usa google script. Hice un pequeño cambio en el código agregué sensores para que la cámara tenga una mejor calidad cuando hay mucha luz o poca luz y forcé el http en lugar del https porque no funcionaba con el siguiente parámetro: client.setInsecure();">
   <meta itemprop="datePublished" content="2023-11-10T04:51:54-03:00">
   <meta itemprop="dateModified" content="2023-11-10T04:51:54-03:00">
-  <meta itemprop="wordCount" content="1551">
+  <meta itemprop="wordCount" content="1554">
   <meta itemprop="keywords" content="Esp32,Capturas,Webcam,Google,Drive">
   
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Subir capturas con una esp32 webcam a google drive">
   <meta name="twitter:description" content="Creo que hay mejores tutoriales que este, por ejemplo enviar las fotos por Telegram, o por correo, o usar firebase. Acá algunos links:
 https://randomnerdtutorials.com/page/5/?s=ESP32-CAM https://randomnerdtutorials.com/esp32-cam-save-picture-firebase-storage/ https://randomnerdtutorials.com/esp32-cam-send-photos-email/ https://randomnerdtutorials.com/telegram-esp32-cam-photo-arduino/ https://randomnerdtutorials.com/esp32-cam-post-image-photo-server/ https://randomnerdtutorials.com/esp32-cam-http-post-php-arduino/ https://randomnerdtutorials.com/esp32-cam-photo-microsd-card-timestamp/ https://randomnerdtutorials.com/esp32-cam-robotics-opencv-autonomous/ https://randomnerdtutorials.com/esp32-cam-display-pictures-firebase-web-app/ https://randomnerdtutorials.com/esp32-cam-connect-external-antenna/ https://randomnerdtutorials.com/send-notifications-esp32/ https://randomnerdtutorials.com/firebase-control-esp32-gpios/
+Disabling brownout: https://www.robmiles.com/journal/2020/1/20/disabling-the-esp32-brownout-detector
 Me compré una cámara ESP32 CAM de MercadoLibre y seguí esta guía para subir las fotos a google drive. https://web.archive.org/web/20230608061848/https://www.gsampallo.com/2019/10/13/esp32-cam-subir-fotos-a-google-drive/. Backup: https://archive.is/ABArm
 Se usa google script. Hice un pequeño cambio en el código agregué sensores para que la cámara tenga una mejor calidad cuando hay mucha luz o poca luz y forcé el http en lugar del https porque no funcionaba con el siguiente parámetro: client.setInsecure();">
 
@@ -71,6 +74,7 @@ https://randomnerdtutorials.com/esp32-cam-display-pictures-firebase-web-app/
 https://randomnerdtutorials.com/esp32-cam-connect-external-antenna/
 https://randomnerdtutorials.com/send-notifications-esp32/
 https://randomnerdtutorials.com/firebase-control-esp32-gpios/
+Disabling brownout: https://www.robmiles.com/journal/2020/1/20/disabling-the-esp32-brownout-detector
 
 Me compré una cámara ESP32 CAM de MercadoLibre y seguí esta guía para subir las fotos a google drive. https://web.archive.org/web/20230608061848/https://www.gsampallo.com/2019/10/13/esp32-cam-subir-fotos-a-google-drive/. Backup: https://archive.is/ABArm
 Se usa google script. Hice un pequeño cambio en el código agregué sensores para que la cámara tenga una mejor calidad cuando hay mucha luz o poca luz y forcé el http en lugar del https porque no funcionaba con el siguiente parámetro: client.setInsecure();">
@@ -154,6 +158,7 @@ Se usa google script. Hice un pequeño cambio en el código agregué sensores pa
 <a href="https://randomnerdtutorials.com/esp32-cam-connect-external-antenna/">https://randomnerdtutorials.com/esp32-cam-connect-external-antenna/</a>
 <a href="https://randomnerdtutorials.com/send-notifications-esp32/">https://randomnerdtutorials.com/send-notifications-esp32/</a>
 <a href="https://randomnerdtutorials.com/firebase-control-esp32-gpios/">https://randomnerdtutorials.com/firebase-control-esp32-gpios/</a></p>
+<p>Disabling brownout: <a href="https://www.robmiles.com/journal/2020/1/20/disabling-the-esp32-brownout-detector">https://www.robmiles.com/journal/2020/1/20/disabling-the-esp32-brownout-detector</a></p>
 <hr>
 <p>Me compré una cámara ESP32 CAM de MercadoLibre y seguí esta guía para subir las fotos a google drive. <a href="https://web.archive.org/web/20230608061848/https://www.gsampallo.com/2019/10/13/esp32-cam-subir-fotos-a-google-drive/">https://web.archive.org/web/20230608061848/https://www.gsampallo.com/2019/10/13/esp32-cam-subir-fotos-a-google-drive/</a>. Backup: <a href="https://archive.is/ABArm">https://archive.is/ABArm</a></p>
 <p>Se usa google script. Hice un pequeño cambio en el código agregué sensores para que la cámara tenga una mejor calidad cuando hay mucha luz o poca luz y forcé el http en lugar del https porque no funcionaba con el siguiente parámetro: <code>client.setInsecure()</code>;</p>

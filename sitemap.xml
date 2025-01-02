@@ -2,16 +2,28 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://imlauera.github.io/tags/arduino/</loc>
+    <lastmod>2025-01-02T11:39:01-03:00</lastmod>
+  </url><url>
+    <loc>https://imlauera.github.io/arduino_enviar_foto_por_smtp_reinstalar_drivers_windows/</loc>
+    <lastmod>2025-01-02T11:39:01-03:00</lastmod>
+  </url><url>
     <loc>https://imlauera.github.io/</loc>
-    <lastmod>2025-01-01T03:42:15-03:00</lastmod>
+    <lastmod>2025-01-02T11:39:01-03:00</lastmod>
+  </url><url>
+    <loc>https://imlauera.github.io/tags/smtp/</loc>
+    <lastmod>2025-01-02T11:39:01-03:00</lastmod>
+  </url><url>
+    <loc>https://imlauera.github.io/tags/</loc>
+    <lastmod>2025-01-02T11:39:01-03:00</lastmod>
+  </url><url>
+    <loc>https://imlauera.github.io/tags/windows/</loc>
+    <lastmod>2025-01-02T11:39:01-03:00</lastmod>
   </url><url>
     <loc>https://imlauera.github.io/tags/python/</loc>
     <lastmod>2024-12-31T12:10:19-03:00</lastmod>
   </url><url>
     <loc>https://imlauera.github.io/pip/</loc>
-    <lastmod>2024-12-31T12:10:19-03:00</lastmod>
-  </url><url>
-    <loc>https://imlauera.github.io/tags/</loc>
     <lastmod>2024-12-31T12:10:19-03:00</lastmod>
   </url><url>
     <loc>https://imlauera.github.io/contribuir_gnu/</loc>
@@ -753,9 +765,6 @@
     <lastmod>2024-09-27T14:24:36-03:00</lastmod>
   </url><url>
     <loc>https://imlauera.github.io/post/crear_backup_windows10/</loc>
-    <lastmod>2024-09-27T14:24:36-03:00</lastmod>
-  </url><url>
-    <loc>https://imlauera.github.io/tags/windows/</loc>
     <lastmod>2024-09-27T14:24:36-03:00</lastmod>
   </url><url>
     <loc>https://imlauera.github.io/post/como_convertir_archivos_myd_myi_sdi/</loc>
@@ -2233,9 +2242,6 @@
   </url><url>
     <loc>https://imlauera.github.io/post/irssi_autojoin/</loc>
     <lastmod>2023-09-08T20:00:49-03:00</lastmod>
-  </url><url>
-    <loc>https://imlauera.github.io/tags/arduino/</loc>
-    <lastmod>2023-07-12T02:26:15-03:00</lastmod>
   </url><url>
     <loc>https://imlauera.github.io/post/arduino-cli-how-to/</loc>
     <lastmod>2023-07-12T02:26:15-03:00</lastmod>

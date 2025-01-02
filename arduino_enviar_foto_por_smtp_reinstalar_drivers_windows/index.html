@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="es">
+
+
+
+
+
+<head>
+  <meta property="og:url" content="https://imlauera.github.io/arduino_enviar_foto_por_smtp_reinstalar_drivers_windows/">
+  <meta property="og:site_name" content="Imlauer">
+  <meta property="og:title" content="Arduino_enviar_foto_por_smtp_reinstalar_drivers_windows">
+  <meta property="og:description" content="Para que este código funcione instalé la biblioteca ESP32 MAIL, lo compilé con ESP32 Wrover Module
+#include &#34;esp_camera.h&#34; #include &#34;SPI.h&#34; #include &#34;driver/rtc_io.h&#34; #include &#34;ESP32_MailClient.h&#34; //#include &#34;ESP_Mail_Client.h&#34; #include &lt;FS.h&gt; #include &lt;SPIFFS.h&gt; #include &lt;WiFi.h&gt; const char* ssid = &#34;SSID&#34;; const char* password = &#34;wifipassword&#34;; #define sender_email &#34;correo@gmail.com&#34; #define sender_email_password &#34;codigo google doble factor de autentication&#34; #define SMTP_Server &#34;smtp.gmail.com&#34; #define SMTP_Server_Port 465 #define email_subject &#34;ESP32-CAM Image Capture&#34; #define email_recipient &#34;otrocorreo@gmail.com&#34; #define CAMERA_MODEL_AI_THINKER #if defined(CAMERA_MODEL_AI_THINKER) #define PWDN_GPIO_NUM 32 #define RESET_GPIO_NUM -1 #define XCLK_GPIO_NUM 0 #define SIOD_GPIO_NUM 26 #define SIOC_GPIO_NUM 27 #define Y9_GPIO_NUM 35 #define Y8_GPIO_NUM 34 #define Y7_GPIO_NUM 39 #define Y6_GPIO_NUM 36 #define Y5_GPIO_NUM 21 #define Y4_GPIO_NUM 19 #define Y3_GPIO_NUM 18 #define Y2_GPIO_NUM 5 #define VSYNC_GPIO_NUM 25 #define HREF_GPIO_NUM 23 #define PCLK_GPIO_NUM 22 #else #error &#34;Camera model not selected&#34; #endif SMTPData smtpData; #define IMAGE_PATH &#34;/image.jpg&#34; void setup() { WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0); //disable brownout detector Serial.begin(115200); Serial.println(); WiFi.begin(ssid, password); Serial.print(&#34;Connecting to WiFi...&#34;); while (WiFi.status() != WL_CONNECTED) { delay(500); Serial.print(&#34;.&#34;); } Serial.println(); if (!SPIFFS.begin(true)) { Serial.println(&#34;An Error has occurred while mounting SPIFFS&#34;); ESP.restart(); } else { delay(500); Serial.println(&#34;SPIFFS mounted successfully&#34;); } Serial.print(&#34;IP Address: http://&#34;); Serial.println(WiFi.localIP()); camera_config_t config; config.ledc_channel = LEDC_CHANNEL_0; config.ledc_timer = LEDC_TIMER_0; config.pin_d0 = Y2_GPIO_NUM; config.pin_d1 = Y3_GPIO_NUM; config.pin_d2 = Y4_GPIO_NUM; config.pin_d3 = Y5_GPIO_NUM; config.pin_d4 = Y6_GPIO_NUM; config.pin_d5 = Y7_GPIO_NUM; config.pin_d6 = Y8_GPIO_NUM; config.pin_d7 = Y9_GPIO_NUM; config.pin_xclk = XCLK_GPIO_NUM; config.pin_pclk = PCLK_GPIO_NUM; config.pin_vsync = VSYNC_GPIO_NUM; config.pin_href = HREF_GPIO_NUM; config.pin_sscb_sda = SIOD_GPIO_NUM; config.pin_sscb_scl = SIOC_GPIO_NUM; config.pin_pwdn = PWDN_GPIO_NUM; config.pin_reset = RESET_GPIO_NUM; config.xclk_freq_hz = 20000000; config.pixel_format = PIXFORMAT_JPEG; if(psramFound()){ config.frame_size = FRAMESIZE_UXGA; config.jpeg_quality = 10; config.fb_count = 2; } else { config.frame_size = FRAMESIZE_SVGA; config.jpeg_quality = 12; config.fb_count = 1; } esp_err_t err = esp_camera_init(&amp;config); if (err != ESP_OK) { Serial.printf(&#34;Camera init failed with error 0x%x&#34;, err); return; } captureSave_image(); sendImage(); } void loop() { delay(300000); esp_restart(); } // Check if photo capture was successful bool check_photo( fs::FS &amp;fs ) { File f_pic = fs.open( IMAGE_PATH ); unsigned int pic_sz = f_pic.size(); return ( pic_sz &gt; 100 ); } // Capture Photo and Save it to SPIFFS void captureSave_image( void ) { camera_fb_t * fb = NULL; bool ok = 0; do { Serial.println(&#34;ESP32-CAM capturing photo...&#34;); fb = esp_camera_fb_get(); if (!fb) { Serial.println(&#34;Failed&#34;); return; } Serial.printf(&#34;Picture file name: %s\n&#34;, IMAGE_PATH); File file = SPIFFS.open(IMAGE_PATH, FILE_WRITE); if (!file) { Serial.println(&#34;Failed to open file in writing mode&#34;); } else { file.write(fb-&gt;buf, fb-&gt;len); Serial.print(&#34;The picture has been saved in &#34;); Serial.print(IMAGE_PATH); Serial.print(&#34; - Size: &#34;); Serial.print(file.size()); Serial.println(&#34; bytes&#34;); } file.close(); esp_camera_fb_return(fb); ok = check_photo(SPIFFS); } while ( !ok ); } void sendImage( void ) { smtpData.setLogin(SMTP_Server, SMTP_Server_Port, sender_email, sender_email_password); smtpData.setSender(&#34;ESP32-CAM&#34;, sender_email); smtpData.setPriority(&#34;High&#34;); smtpData.setSubject(email_subject); smtpData.setMessage(&#34;PFA ESP32-CAM Captured Image.&#34;, false); smtpData.addRecipient(email_recipient); smtpData.addAttachFile(IMAGE_PATH, &#34;image/jpg&#34;); smtpData.setFileStorageType(MailClientStorageType::SPIFFS); smtpData.setSendCallback(sendCallback); if (!MailClient.sendMail(smtpData)) Serial.println(&#34;Error sending Email, &#34; &#43; MailClient.smtpErrorReason()); smtpData.empty(); } void sendCallback(SendStatus msg) { Serial.println(msg.info()); } Al compilar y subir el programa en Arduino me tiraba un error de esptool.py lo solucioné borrando y reinstalando drivers mostrados acá:">
+  <meta property="og:locale" content="es_es">
+  <meta property="og:type" content="article">
+    <meta property="article:published_time" content="2025-01-02T11:39:01-03:00">
+    <meta property="article:modified_time" content="2025-01-02T11:39:01-03:00">
+    <meta property="article:tag" content="Arduino">
+    <meta property="article:tag" content="Smtp">
+    <meta property="article:tag" content="Windows">
+
+  
+  <meta itemprop="name" content="Arduino_enviar_foto_por_smtp_reinstalar_drivers_windows">
+  <meta itemprop="description" content="Para que este código funcione instalé la biblioteca ESP32 MAIL, lo compilé con ESP32 Wrover Module
+#include &#34;esp_camera.h&#34; #include &#34;SPI.h&#34; #include &#34;driver/rtc_io.h&#34; #include &#34;ESP32_MailClient.h&#34; //#include &#34;ESP_Mail_Client.h&#34; #include &lt;FS.h&gt; #include &lt;SPIFFS.h&gt; #include &lt;WiFi.h&gt; const char* ssid = &#34;SSID&#34;; const char* password = &#34;wifipassword&#34;; #define sender_email &#34;correo@gmail.com&#34; #define sender_email_password &#34;codigo google doble factor de autentication&#34; #define SMTP_Server &#34;smtp.gmail.com&#34; #define SMTP_Server_Port 465 #define email_subject &#34;ESP32-CAM Image Capture&#34; #define email_recipient &#34;otrocorreo@gmail.com&#34; #define CAMERA_MODEL_AI_THINKER #if defined(CAMERA_MODEL_AI_THINKER) #define PWDN_GPIO_NUM 32 #define RESET_GPIO_NUM -1 #define XCLK_GPIO_NUM 0 #define SIOD_GPIO_NUM 26 #define SIOC_GPIO_NUM 27 #define Y9_GPIO_NUM 35 #define Y8_GPIO_NUM 34 #define Y7_GPIO_NUM 39 #define Y6_GPIO_NUM 36 #define Y5_GPIO_NUM 21 #define Y4_GPIO_NUM 19 #define Y3_GPIO_NUM 18 #define Y2_GPIO_NUM 5 #define VSYNC_GPIO_NUM 25 #define HREF_GPIO_NUM 23 #define PCLK_GPIO_NUM 22 #else #error &#34;Camera model not selected&#34; #endif SMTPData smtpData; #define IMAGE_PATH &#34;/image.jpg&#34; void setup() { WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0); //disable brownout detector Serial.begin(115200); Serial.println(); WiFi.begin(ssid, password); Serial.print(&#34;Connecting to WiFi...&#34;); while (WiFi.status() != WL_CONNECTED) { delay(500); Serial.print(&#34;.&#34;); } Serial.println(); if (!SPIFFS.begin(true)) { Serial.println(&#34;An Error has occurred while mounting SPIFFS&#34;); ESP.restart(); } else { delay(500); Serial.println(&#34;SPIFFS mounted successfully&#34;); } Serial.print(&#34;IP Address: http://&#34;); Serial.println(WiFi.localIP()); camera_config_t config; config.ledc_channel = LEDC_CHANNEL_0; config.ledc_timer = LEDC_TIMER_0; config.pin_d0 = Y2_GPIO_NUM; config.pin_d1 = Y3_GPIO_NUM; config.pin_d2 = Y4_GPIO_NUM; config.pin_d3 = Y5_GPIO_NUM; config.pin_d4 = Y6_GPIO_NUM; config.pin_d5 = Y7_GPIO_NUM; config.pin_d6 = Y8_GPIO_NUM; config.pin_d7 = Y9_GPIO_NUM; config.pin_xclk = XCLK_GPIO_NUM; config.pin_pclk = PCLK_GPIO_NUM; config.pin_vsync = VSYNC_GPIO_NUM; config.pin_href = HREF_GPIO_NUM; config.pin_sscb_sda = SIOD_GPIO_NUM; config.pin_sscb_scl = SIOC_GPIO_NUM; config.pin_pwdn = PWDN_GPIO_NUM; config.pin_reset = RESET_GPIO_NUM; config.xclk_freq_hz = 20000000; config.pixel_format = PIXFORMAT_JPEG; if(psramFound()){ config.frame_size = FRAMESIZE_UXGA; config.jpeg_quality = 10; config.fb_count = 2; } else { config.frame_size = FRAMESIZE_SVGA; config.jpeg_quality = 12; config.fb_count = 1; } esp_err_t err = esp_camera_init(&amp;config); if (err != ESP_OK) { Serial.printf(&#34;Camera init failed with error 0x%x&#34;, err); return; } captureSave_image(); sendImage(); } void loop() { delay(300000); esp_restart(); } // Check if photo capture was successful bool check_photo( fs::FS &amp;fs ) { File f_pic = fs.open( IMAGE_PATH ); unsigned int pic_sz = f_pic.size(); return ( pic_sz &gt; 100 ); } // Capture Photo and Save it to SPIFFS void captureSave_image( void ) { camera_fb_t * fb = NULL; bool ok = 0; do { Serial.println(&#34;ESP32-CAM capturing photo...&#34;); fb = esp_camera_fb_get(); if (!fb) { Serial.println(&#34;Failed&#34;); return; } Serial.printf(&#34;Picture file name: %s\n&#34;, IMAGE_PATH); File file = SPIFFS.open(IMAGE_PATH, FILE_WRITE); if (!file) { Serial.println(&#34;Failed to open file in writing mode&#34;); } else { file.write(fb-&gt;buf, fb-&gt;len); Serial.print(&#34;The picture has been saved in &#34;); Serial.print(IMAGE_PATH); Serial.print(&#34; - Size: &#34;); Serial.print(file.size()); Serial.println(&#34; bytes&#34;); } file.close(); esp_camera_fb_return(fb); ok = check_photo(SPIFFS); } while ( !ok ); } void sendImage( void ) { smtpData.setLogin(SMTP_Server, SMTP_Server_Port, sender_email, sender_email_password); smtpData.setSender(&#34;ESP32-CAM&#34;, sender_email); smtpData.setPriority(&#34;High&#34;); smtpData.setSubject(email_subject); smtpData.setMessage(&#34;PFA ESP32-CAM Captured Image.&#34;, false); smtpData.addRecipient(email_recipient); smtpData.addAttachFile(IMAGE_PATH, &#34;image/jpg&#34;); smtpData.setFileStorageType(MailClientStorageType::SPIFFS); smtpData.setSendCallback(sendCallback); if (!MailClient.sendMail(smtpData)) Serial.println(&#34;Error sending Email, &#34; &#43; MailClient.smtpErrorReason()); smtpData.empty(); } void sendCallback(SendStatus msg) { Serial.println(msg.info()); } Al compilar y subir el programa en Arduino me tiraba un error de esptool.py lo solucioné borrando y reinstalando drivers mostrados acá:">
+  <meta itemprop="datePublished" content="2025-01-02T11:39:01-03:00">
+  <meta itemprop="dateModified" content="2025-01-02T11:39:01-03:00">
+  <meta itemprop="wordCount" content="471">
+  <meta itemprop="keywords" content="Arduino,Smtp,Windows">
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Arduino_enviar_foto_por_smtp_reinstalar_drivers_windows">
+  <meta name="twitter:description" content="Para que este código funcione instalé la biblioteca ESP32 MAIL, lo compilé con ESP32 Wrover Module
+#include &#34;esp_camera.h&#34; #include &#34;SPI.h&#34; #include &#34;driver/rtc_io.h&#34; #include &#34;ESP32_MailClient.h&#34; //#include &#34;ESP_Mail_Client.h&#34; #include &lt;FS.h&gt; #include &lt;SPIFFS.h&gt; #include &lt;WiFi.h&gt; const char* ssid = &#34;SSID&#34;; const char* password = &#34;wifipassword&#34;; #define sender_email &#34;correo@gmail.com&#34; #define sender_email_password &#34;codigo google doble factor de autentication&#34; #define SMTP_Server &#34;smtp.gmail.com&#34; #define SMTP_Server_Port 465 #define email_subject &#34;ESP32-CAM Image Capture&#34; #define email_recipient &#34;otrocorreo@gmail.com&#34; #define CAMERA_MODEL_AI_THINKER #if defined(CAMERA_MODEL_AI_THINKER) #define PWDN_GPIO_NUM 32 #define RESET_GPIO_NUM -1 #define XCLK_GPIO_NUM 0 #define SIOD_GPIO_NUM 26 #define SIOC_GPIO_NUM 27 #define Y9_GPIO_NUM 35 #define Y8_GPIO_NUM 34 #define Y7_GPIO_NUM 39 #define Y6_GPIO_NUM 36 #define Y5_GPIO_NUM 21 #define Y4_GPIO_NUM 19 #define Y3_GPIO_NUM 18 #define Y2_GPIO_NUM 5 #define VSYNC_GPIO_NUM 25 #define HREF_GPIO_NUM 23 #define PCLK_GPIO_NUM 22 #else #error &#34;Camera model not selected&#34; #endif SMTPData smtpData; #define IMAGE_PATH &#34;/image.jpg&#34; void setup() { WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0); //disable brownout detector Serial.begin(115200); Serial.println(); WiFi.begin(ssid, password); Serial.print(&#34;Connecting to WiFi...&#34;); while (WiFi.status() != WL_CONNECTED) { delay(500); Serial.print(&#34;.&#34;); } Serial.println(); if (!SPIFFS.begin(true)) { Serial.println(&#34;An Error has occurred while mounting SPIFFS&#34;); ESP.restart(); } else { delay(500); Serial.println(&#34;SPIFFS mounted successfully&#34;); } Serial.print(&#34;IP Address: http://&#34;); Serial.println(WiFi.localIP()); camera_config_t config; config.ledc_channel = LEDC_CHANNEL_0; config.ledc_timer = LEDC_TIMER_0; config.pin_d0 = Y2_GPIO_NUM; config.pin_d1 = Y3_GPIO_NUM; config.pin_d2 = Y4_GPIO_NUM; config.pin_d3 = Y5_GPIO_NUM; config.pin_d4 = Y6_GPIO_NUM; config.pin_d5 = Y7_GPIO_NUM; config.pin_d6 = Y8_GPIO_NUM; config.pin_d7 = Y9_GPIO_NUM; config.pin_xclk = XCLK_GPIO_NUM; config.pin_pclk = PCLK_GPIO_NUM; config.pin_vsync = VSYNC_GPIO_NUM; config.pin_href = HREF_GPIO_NUM; config.pin_sscb_sda = SIOD_GPIO_NUM; config.pin_sscb_scl = SIOC_GPIO_NUM; config.pin_pwdn = PWDN_GPIO_NUM; config.pin_reset = RESET_GPIO_NUM; config.xclk_freq_hz = 20000000; config.pixel_format = PIXFORMAT_JPEG; if(psramFound()){ config.frame_size = FRAMESIZE_UXGA; config.jpeg_quality = 10; config.fb_count = 2; } else { config.frame_size = FRAMESIZE_SVGA; config.jpeg_quality = 12; config.fb_count = 1; } esp_err_t err = esp_camera_init(&amp;config); if (err != ESP_OK) { Serial.printf(&#34;Camera init failed with error 0x%x&#34;, err); return; } captureSave_image(); sendImage(); } void loop() { delay(300000); esp_restart(); } // Check if photo capture was successful bool check_photo( fs::FS &amp;fs ) { File f_pic = fs.open( IMAGE_PATH ); unsigned int pic_sz = f_pic.size(); return ( pic_sz &gt; 100 ); } // Capture Photo and Save it to SPIFFS void captureSave_image( void ) { camera_fb_t * fb = NULL; bool ok = 0; do { Serial.println(&#34;ESP32-CAM capturing photo...&#34;); fb = esp_camera_fb_get(); if (!fb) { Serial.println(&#34;Failed&#34;); return; } Serial.printf(&#34;Picture file name: %s\n&#34;, IMAGE_PATH); File file = SPIFFS.open(IMAGE_PATH, FILE_WRITE); if (!file) { Serial.println(&#34;Failed to open file in writing mode&#34;); } else { file.write(fb-&gt;buf, fb-&gt;len); Serial.print(&#34;The picture has been saved in &#34;); Serial.print(IMAGE_PATH); Serial.print(&#34; - Size: &#34;); Serial.print(file.size()); Serial.println(&#34; bytes&#34;); } file.close(); esp_camera_fb_return(fb); ok = check_photo(SPIFFS); } while ( !ok ); } void sendImage( void ) { smtpData.setLogin(SMTP_Server, SMTP_Server_Port, sender_email, sender_email_password); smtpData.setSender(&#34;ESP32-CAM&#34;, sender_email); smtpData.setPriority(&#34;High&#34;); smtpData.setSubject(email_subject); smtpData.setMessage(&#34;PFA ESP32-CAM Captured Image.&#34;, false); smtpData.addRecipient(email_recipient); smtpData.addAttachFile(IMAGE_PATH, &#34;image/jpg&#34;); smtpData.setFileStorageType(MailClientStorageType::SPIFFS); smtpData.setSendCallback(sendCallback); if (!MailClient.sendMail(smtpData)) Serial.println(&#34;Error sending Email, &#34; &#43; MailClient.smtpErrorReason()); smtpData.empty(); } void sendCallback(SendStatus msg) { Serial.println(msg.info()); } Al compilar y subir el programa en Arduino me tiraba un error de esptool.py lo solucioné borrando y reinstalando drivers mostrados acá:">
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>
+    
+    Arduino_enviar_foto_por_smtp_reinstalar_drivers_windows
+    
+  </title>
+  <link rel="stylesheet" href='https://imlauera.github.io/css/site.min.css'>
+  <link rel="canonical" href="https://imlauera.github.io/arduino_enviar_foto_por_smtp_reinstalar_drivers_windows/">
+  <link rel="alternate" type="application/rss&#43;xml" href="https://imlauera.github.io/index.xml" title="Imlauer">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
+  <meta name="author" content="Imlauer.">
+  <meta name="description" content="Para que este código funcione instalé la biblioteca ESP32 MAIL, lo compilé con ESP32 Wrover Module
+#include &#34;esp_camera.h&#34;
+#include &#34;SPI.h&#34;
+#include &#34;driver/rtc_io.h&#34;
+#include &#34;ESP32_MailClient.h&#34;
+//#include &#34;ESP_Mail_Client.h&#34;
+#include &lt;FS.h&gt;
+#include &lt;SPIFFS.h&gt;
+#include &lt;WiFi.h&gt;
+
+const char* ssid = &#34;SSID&#34;;
+const char* password = &#34;wifipassword&#34;;
+
+#define sender_email    &#34;correo@gmail.com&#34;
+#define sender_email_password   &#34;codigo google doble factor de autentication&#34;
+#define SMTP_Server            &#34;smtp.gmail.com&#34;
+#define SMTP_Server_Port        465
+#define email_subject          &#34;ESP32-CAM Image Capture&#34;
+#define email_recipient        &#34;otrocorreo@gmail.com&#34;
+
+#define CAMERA_MODEL_AI_THINKER
+
+#if defined(CAMERA_MODEL_AI_THINKER)
+  #define PWDN_GPIO_NUM     32
+  #define RESET_GPIO_NUM    -1
+  #define XCLK_GPIO_NUM      0
+  #define SIOD_GPIO_NUM     26
+  #define SIOC_GPIO_NUM     27
+  
+  #define Y9_GPIO_NUM       35
+  #define Y8_GPIO_NUM       34
+  #define Y7_GPIO_NUM       39
+  #define Y6_GPIO_NUM       36
+  #define Y5_GPIO_NUM       21
+  #define Y4_GPIO_NUM       19
+  #define Y3_GPIO_NUM       18
+  #define Y2_GPIO_NUM        5
+  #define VSYNC_GPIO_NUM    25
+  #define HREF_GPIO_NUM     23
+  #define PCLK_GPIO_NUM     22
+#else
+  #error &#34;Camera model not selected&#34;
+#endif
+
+SMTPData smtpData;
+
+#define IMAGE_PATH &#34;/image.jpg&#34;
+
+void setup() {
+  WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0); //disable brownout detector
+  
+  Serial.begin(115200);
+  Serial.println();
+  WiFi.begin(ssid, password);
+  Serial.print(&#34;Connecting to WiFi...&#34;);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(&#34;.&#34;);
+  }
+  Serial.println();
+  
+  if (!SPIFFS.begin(true)) {
+    Serial.println(&#34;An Error has occurred while mounting SPIFFS&#34;);
+    ESP.restart();
+  }
+  else {
+    delay(500);
+    Serial.println(&#34;SPIFFS mounted successfully&#34;);
+  }
+  Serial.print(&#34;IP Address: http://&#34;);
+  Serial.println(WiFi.localIP());
+   
+  camera_config_t config;
+  config.ledc_channel = LEDC_CHANNEL_0;
+  config.ledc_timer = LEDC_TIMER_0;
+  config.pin_d0 = Y2_GPIO_NUM;
+  config.pin_d1 = Y3_GPIO_NUM;
+  config.pin_d2 = Y4_GPIO_NUM;
+  config.pin_d3 = Y5_GPIO_NUM;
+  config.pin_d4 = Y6_GPIO_NUM;
+  config.pin_d5 = Y7_GPIO_NUM;
+  config.pin_d6 = Y8_GPIO_NUM;
+  config.pin_d7 = Y9_GPIO_NUM;
+  config.pin_xclk = XCLK_GPIO_NUM;
+  config.pin_pclk = PCLK_GPIO_NUM;
+  config.pin_vsync = VSYNC_GPIO_NUM;
+  config.pin_href = HREF_GPIO_NUM;
+  config.pin_sscb_sda = SIOD_GPIO_NUM;
+  config.pin_sscb_scl = SIOC_GPIO_NUM;
+  config.pin_pwdn = PWDN_GPIO_NUM;
+  config.pin_reset = RESET_GPIO_NUM;
+  config.xclk_freq_hz = 20000000;
+  config.pixel_format = PIXFORMAT_JPEG;
+  
+  if(psramFound()){
+    config.frame_size = FRAMESIZE_UXGA;
+    config.jpeg_quality = 10;
+    config.fb_count = 2;
+  } else {
+    config.frame_size = FRAMESIZE_SVGA;
+    config.jpeg_quality = 12;
+    config.fb_count = 1;
+  }
+
+  esp_err_t err = esp_camera_init(&amp;config);
+  if (err != ESP_OK) {
+    Serial.printf(&#34;Camera init failed with error 0x%x&#34;, err);
+    return;
+  }
+  captureSave_image();
+  sendImage();
+}
+
+void loop() {
+  delay(300000);
+  esp_restart();
+}
+
+// Check if photo capture was successful
+bool check_photo( fs::FS &amp;fs ) {
+  File f_pic = fs.open( IMAGE_PATH );
+  unsigned int pic_sz = f_pic.size();
+  return ( pic_sz &gt; 100 );
+}
+
+// Capture Photo and Save it to SPIFFS
+void captureSave_image( void ) {
+  camera_fb_t * fb = NULL; 
+  bool ok = 0;
+
+  do {
+    Serial.println(&#34;ESP32-CAM capturing photo...&#34;);
+
+    fb = esp_camera_fb_get();
+    if (!fb) {
+      Serial.println(&#34;Failed&#34;);
+      return;
+    }
+    Serial.printf(&#34;Picture file name: %s\n&#34;, IMAGE_PATH);
+    File file = SPIFFS.open(IMAGE_PATH, FILE_WRITE);
+    if (!file) {
+      Serial.println(&#34;Failed to open file in writing mode&#34;);
+    }
+    else {
+      file.write(fb-&gt;buf, fb-&gt;len); 
+      Serial.print(&#34;The picture has been saved in &#34;);
+      Serial.print(IMAGE_PATH);
+      Serial.print(&#34; - Size: &#34;);
+      Serial.print(file.size());
+      Serial.println(&#34; bytes&#34;);
+    }
+   
+    file.close();
+    esp_camera_fb_return(fb);
+
+    ok = check_photo(SPIFFS);
+  } while ( !ok );
+}
+
+void sendImage( void ) {
+  smtpData.setLogin(SMTP_Server, SMTP_Server_Port, sender_email, sender_email_password);
+  smtpData.setSender(&#34;ESP32-CAM&#34;, sender_email);
+  smtpData.setPriority(&#34;High&#34;);
+  smtpData.setSubject(email_subject);
+  smtpData.setMessage(&#34;PFA ESP32-CAM Captured Image.&#34;, false);
+  smtpData.addRecipient(email_recipient);
+  smtpData.addAttachFile(IMAGE_PATH, &#34;image/jpg&#34;);
+  smtpData.setFileStorageType(MailClientStorageType::SPIFFS);
+  smtpData.setSendCallback(sendCallback);
+  
+  if (!MailClient.sendMail(smtpData))
+    Serial.println(&#34;Error sending Email, &#34; &#43; MailClient.smtpErrorReason());
+
+  smtpData.empty();
+}
+
+void sendCallback(SendStatus msg) {
+  Serial.println(msg.info());
+}
+Al compilar y subir el programa en Arduino me tiraba un error de esptool.py lo solucioné borrando y reinstalando drivers mostrados acá:">
+</head>
+<body><nav class="navbar is-transparent " role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="https://imlauera.github.io/">
+      <figure class="image">
+        <img alt="" class="is-rounded" src="/img/memememe.jpg">
+      </figure>
+    </a>
+    <a class="navbar-item" href="https://imlauera.github.io/">
+      Imlauer
+    </a>
+    <a class="navbar-item" href="/acerca/">
+      Acerca de Mi
+    </a>
+  </div>
+  
+  
+</nav>
+
+  <section>
+    <section class='hero is-small is-link is-fullwidth'>
+      <div class="hero-body">
+<div class="container">
+  <h1 class="title">
+    Arduino_enviar_foto_por_smtp_reinstalar_drivers_windows
+  </h1>
+  <h2 class="subtitle">
+    <time datetime='2025-01-02T11:39:01-03:00'>
+      January 02, 2025
+    </time>
+    
+    <br>
+    
+    
+    
+    <a class="tag is-info" href="https://imlauera.github.io/tags/arduino/">Arduino</a>
+    
+    
+    
+    
+    <a class="tag is-info" href="https://imlauera.github.io/tags/smtp/">Smtp</a>
+    
+    
+    
+    
+    <a class="tag is-info" href="https://imlauera.github.io/tags/windows/">Windows</a>
+    
+    
+    
+  </h2>
+</div>
+
+      </div>
+    </section>
+    <section class="section">
+      <div class="container">
+<div class="content is-medium">
+  <p>Para que este código funcione instalé la biblioteca ESP32 MAIL, lo compilé con ESP32 Wrover Module</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">#include &#34;esp_camera.h&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &#34;SPI.h&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &#34;driver/rtc_io.h&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &#34;ESP32_MailClient.h&#34;</span>
+</span></span><span style="display:flex;"><span>//#include <span style="color:#e6db74">&#34;ESP_Mail_Client.h&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;FS.h&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;SPIFFS.h&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;WiFi.h&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>const char* ssid <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;SSID&#34;</span>;
+</span></span><span style="display:flex;"><span>const char* password <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;wifipassword&#34;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#define sender_email    &#34;correo@gmail.com&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#define sender_email_password   &#34;codigo google doble factor de autentication&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#define SMTP_Server            &#34;smtp.gmail.com&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#define SMTP_Server_Port        465</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#define email_subject          &#34;ESP32-CAM Image Capture&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#define email_recipient        &#34;otrocorreo@gmail.com&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#define CAMERA_MODEL_AI_THINKER</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#if defined(CAMERA_MODEL_AI_THINKER)</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#define PWDN_GPIO_NUM     32</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#define RESET_GPIO_NUM    -1</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#define XCLK_GPIO_NUM      0</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#define SIOD_GPIO_NUM     26</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#define SIOC_GPIO_NUM     27</span>
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#define Y9_GPIO_NUM       35</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#define Y8_GPIO_NUM       34</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#define Y7_GPIO_NUM       39</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#define Y6_GPIO_NUM       36</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#define Y5_GPIO_NUM       21</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#define Y4_GPIO_NUM       19</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#define Y3_GPIO_NUM       18</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#define Y2_GPIO_NUM        5</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#define VSYNC_GPIO_NUM    25</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#define HREF_GPIO_NUM     23</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#define PCLK_GPIO_NUM     22</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#else</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#error &#34;Camera model not selected&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#endif</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>SMTPData smtpData;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#define IMAGE_PATH &#34;/image.jpg&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>void setup<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  WRITE_PERI_REG<span style="color:#f92672">(</span>RTC_CNTL_BROWN_OUT_REG, 0<span style="color:#f92672">)</span>; //disable brownout detector
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  Serial.begin<span style="color:#f92672">(</span>115200<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>  Serial.println<span style="color:#f92672">()</span>;
+</span></span><span style="display:flex;"><span>  WiFi.begin<span style="color:#f92672">(</span>ssid, password<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>  Serial.print<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Connecting to WiFi...&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span>WiFi.status<span style="color:#f92672">()</span> !<span style="color:#f92672">=</span> WL_CONNECTED<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    delay<span style="color:#f92672">(</span>500<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    Serial.print<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;.&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>  Serial.println<span style="color:#f92672">()</span>;
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>!SPIFFS.begin<span style="color:#f92672">(</span>true<span style="color:#f92672">))</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    Serial.println<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;An Error has occurred while mounting SPIFFS&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    ESP.restart<span style="color:#f92672">()</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    delay<span style="color:#f92672">(</span>500<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    Serial.println<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;SPIFFS mounted successfully&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>  Serial.print<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;IP Address: http://&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>  Serial.println<span style="color:#f92672">(</span>WiFi.localIP<span style="color:#f92672">())</span>;
+</span></span><span style="display:flex;"><span>   
+</span></span><span style="display:flex;"><span>  camera_config_t config;
+</span></span><span style="display:flex;"><span>  config.ledc_channel <span style="color:#f92672">=</span> LEDC_CHANNEL_0;
+</span></span><span style="display:flex;"><span>  config.ledc_timer <span style="color:#f92672">=</span> LEDC_TIMER_0;
+</span></span><span style="display:flex;"><span>  config.pin_d0 <span style="color:#f92672">=</span> Y2_GPIO_NUM;
+</span></span><span style="display:flex;"><span>  config.pin_d1 <span style="color:#f92672">=</span> Y3_GPIO_NUM;
+</span></span><span style="display:flex;"><span>  config.pin_d2 <span style="color:#f92672">=</span> Y4_GPIO_NUM;
+</span></span><span style="display:flex;"><span>  config.pin_d3 <span style="color:#f92672">=</span> Y5_GPIO_NUM;
+</span></span><span style="display:flex;"><span>  config.pin_d4 <span style="color:#f92672">=</span> Y6_GPIO_NUM;
+</span></span><span style="display:flex;"><span>  config.pin_d5 <span style="color:#f92672">=</span> Y7_GPIO_NUM;
+</span></span><span style="display:flex;"><span>  config.pin_d6 <span style="color:#f92672">=</span> Y8_GPIO_NUM;
+</span></span><span style="display:flex;"><span>  config.pin_d7 <span style="color:#f92672">=</span> Y9_GPIO_NUM;
+</span></span><span style="display:flex;"><span>  config.pin_xclk <span style="color:#f92672">=</span> XCLK_GPIO_NUM;
+</span></span><span style="display:flex;"><span>  config.pin_pclk <span style="color:#f92672">=</span> PCLK_GPIO_NUM;
+</span></span><span style="display:flex;"><span>  config.pin_vsync <span style="color:#f92672">=</span> VSYNC_GPIO_NUM;
+</span></span><span style="display:flex;"><span>  config.pin_href <span style="color:#f92672">=</span> HREF_GPIO_NUM;
+</span></span><span style="display:flex;"><span>  config.pin_sscb_sda <span style="color:#f92672">=</span> SIOD_GPIO_NUM;
+</span></span><span style="display:flex;"><span>  config.pin_sscb_scl <span style="color:#f92672">=</span> SIOC_GPIO_NUM;
+</span></span><span style="display:flex;"><span>  config.pin_pwdn <span style="color:#f92672">=</span> PWDN_GPIO_NUM;
+</span></span><span style="display:flex;"><span>  config.pin_reset <span style="color:#f92672">=</span> RESET_GPIO_NUM;
+</span></span><span style="display:flex;"><span>  config.xclk_freq_hz <span style="color:#f92672">=</span> 20000000;
+</span></span><span style="display:flex;"><span>  config.pixel_format <span style="color:#f92672">=</span> PIXFORMAT_JPEG;
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span><span style="color:#f92672">(</span>psramFound<span style="color:#f92672">()){</span>
+</span></span><span style="display:flex;"><span>    config.frame_size <span style="color:#f92672">=</span> FRAMESIZE_UXGA;
+</span></span><span style="display:flex;"><span>    config.jpeg_quality <span style="color:#f92672">=</span> 10;
+</span></span><span style="display:flex;"><span>    config.fb_count <span style="color:#f92672">=</span> 2;
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    config.frame_size <span style="color:#f92672">=</span> FRAMESIZE_SVGA;
+</span></span><span style="display:flex;"><span>    config.jpeg_quality <span style="color:#f92672">=</span> 12;
+</span></span><span style="display:flex;"><span>    config.fb_count <span style="color:#f92672">=</span> 1;
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  esp_err_t err <span style="color:#f92672">=</span> esp_camera_init<span style="color:#f92672">(</span>&amp;config<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>err !<span style="color:#f92672">=</span> ESP_OK<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    Serial.printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Camera init failed with error 0x%x&#34;</span>, err<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>  captureSave_image<span style="color:#f92672">()</span>;
+</span></span><span style="display:flex;"><span>  sendImage<span style="color:#f92672">()</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>void loop<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  delay<span style="color:#f92672">(</span>300000<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>  esp_restart<span style="color:#f92672">()</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// Check <span style="color:#66d9ef">if</span> photo capture was successful
+</span></span><span style="display:flex;"><span>bool check_photo<span style="color:#f92672">(</span> fs::FS &amp;fs <span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  File f_pic <span style="color:#f92672">=</span> fs.open<span style="color:#f92672">(</span> IMAGE_PATH <span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>  unsigned int pic_sz <span style="color:#f92672">=</span> f_pic.size<span style="color:#f92672">()</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#f92672">(</span> pic_sz &gt; <span style="color:#ae81ff">100</span> <span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>// Capture Photo and Save it to SPIFFS
+</span></span><span style="display:flex;"><span>void captureSave_image<span style="color:#f92672">(</span> void <span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  camera_fb_t * fb <span style="color:#f92672">=</span> NULL; 
+</span></span><span style="display:flex;"><span>  bool ok <span style="color:#f92672">=</span> 0;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">do</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    Serial.println<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;ESP32-CAM capturing photo...&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    fb <span style="color:#f92672">=</span> esp_camera_fb_get<span style="color:#f92672">()</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>!fb<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>      Serial.println<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Failed&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    Serial.printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Picture file name: %s\n&#34;</span>, IMAGE_PATH<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    File file <span style="color:#f92672">=</span> SPIFFS.open<span style="color:#f92672">(</span>IMAGE_PATH, FILE_WRITE<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>!file<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>      Serial.println<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Failed to open file in writing mode&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>      file.write<span style="color:#f92672">(</span>fb-&gt;buf, fb-&gt;len<span style="color:#f92672">)</span>; 
+</span></span><span style="display:flex;"><span>      Serial.print<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;The picture has been saved in &#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>      Serial.print<span style="color:#f92672">(</span>IMAGE_PATH<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>      Serial.print<span style="color:#f92672">(</span><span style="color:#e6db74">&#34; - Size: &#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>      Serial.print<span style="color:#f92672">(</span>file.size<span style="color:#f92672">())</span>;
+</span></span><span style="display:flex;"><span>      Serial.println<span style="color:#f92672">(</span><span style="color:#e6db74">&#34; bytes&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>   
+</span></span><span style="display:flex;"><span>    file.close<span style="color:#f92672">()</span>;
+</span></span><span style="display:flex;"><span>    esp_camera_fb_return<span style="color:#f92672">(</span>fb<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    ok <span style="color:#f92672">=</span> check_photo<span style="color:#f92672">(</span>SPIFFS<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span> <span style="color:#66d9ef">while</span> <span style="color:#f92672">(</span> !ok <span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>void sendImage<span style="color:#f92672">(</span> void <span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  smtpData.setLogin<span style="color:#f92672">(</span>SMTP_Server, SMTP_Server_Port, sender_email, sender_email_password<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>  smtpData.setSender<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;ESP32-CAM&#34;</span>, sender_email<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>  smtpData.setPriority<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;High&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>  smtpData.setSubject<span style="color:#f92672">(</span>email_subject<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>  smtpData.setMessage<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;PFA ESP32-CAM Captured Image.&#34;</span>, false<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>  smtpData.addRecipient<span style="color:#f92672">(</span>email_recipient<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>  smtpData.addAttachFile<span style="color:#f92672">(</span>IMAGE_PATH, <span style="color:#e6db74">&#34;image/jpg&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>  smtpData.setFileStorageType<span style="color:#f92672">(</span>MailClientStorageType::SPIFFS<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>  smtpData.setSendCallback<span style="color:#f92672">(</span>sendCallback<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>!MailClient.sendMail<span style="color:#f92672">(</span>smtpData<span style="color:#f92672">))</span>
+</span></span><span style="display:flex;"><span>    Serial.println<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Error sending Email, &#34;</span> + MailClient.smtpErrorReason<span style="color:#f92672">())</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  smtpData.empty<span style="color:#f92672">()</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>void sendCallback<span style="color:#f92672">(</span>SendStatus msg<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  Serial.println<span style="color:#f92672">(</span>msg.info<span style="color:#f92672">())</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>Al compilar y subir el programa en Arduino me tiraba un error de esptool.py lo solucioné borrando y reinstalando drivers mostrados acá:</p>
+<p><a href="https://forum.arduino.cc/t/a-fatal-esptool-py-error-occurred-cannot-configure-port-something-went-wrong/1225308/7">https://forum.arduino.cc/t/a-fatal-esptool-py-error-occurred-cannot-configure-port-something-went-wrong/1225308/7</a></p>
+
+</div>
+
+
+      </div>
+    </section>
+  </section><script 
+src="/quiz/quizdown.js">
+</script>
+<script 
+src="/quiz/quizdownKatex.js">
+</script>
+<script 
+src="/quiz/quizdownHighlight.js">
+</script>
+<script>quizdown.register(quizdownHighlight).register(quizdownKatex).init()</script> 
+<footer class="footer">
+  <div class="content has-text-centered">
+    
+    
+    <p>
+      
+      <a class="" href="https://imlauera.github.io/index.xml" target="_blank">
+        <span>
+          RSS
+        </span>
+      </a>
+      
+      | <a href="https://imlauera.github.io" target="_blank">Andres Imlauer.</a> 
+
+      
+      
+    </p>
+    
+  </div>
+
+
+
+
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({ tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]} })
+</script>
+</footer>
+
+
+</body>
+</html>

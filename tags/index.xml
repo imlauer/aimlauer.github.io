@@ -6,8 +6,29 @@
     <description>Recent content in Tags on Imlauer</description>
     <generator>Hugo</generator>
     <language>es-es</language>
-    <lastBuildDate>Tue, 31 Dec 2024 12:10:19 -0300</lastBuildDate>
+    <lastBuildDate>Thu, 02 Jan 2025 11:39:01 -0300</lastBuildDate>
     <atom:link href="https://imlauera.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Arduino</title>
+      <link>https://imlauera.github.io/tags/arduino/</link>
+      <pubDate>Thu, 02 Jan 2025 11:39:01 -0300</pubDate>
+      <guid>https://imlauera.github.io/tags/arduino/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Smtp</title>
+      <link>https://imlauera.github.io/tags/smtp/</link>
+      <pubDate>Thu, 02 Jan 2025 11:39:01 -0300</pubDate>
+      <guid>https://imlauera.github.io/tags/smtp/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Windows</title>
+      <link>https://imlauera.github.io/tags/windows/</link>
+      <pubDate>Thu, 02 Jan 2025 11:39:01 -0300</pubDate>
+      <guid>https://imlauera.github.io/tags/windows/</guid>
+      <description></description>
+    </item>
     <item>
       <title>Python</title>
       <link>https://imlauera.github.io/tags/python/</link>
@@ -748,13 +769,6 @@
       <link>https://imlauera.github.io/tags/backup/</link>
       <pubDate>Fri, 27 Sep 2024 14:24:36 -0300</pubDate>
       <guid>https://imlauera.github.io/tags/backup/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Windows</title>
-      <link>https://imlauera.github.io/tags/windows/</link>
-      <pubDate>Fri, 27 Sep 2024 14:24:36 -0300</pubDate>
-      <guid>https://imlauera.github.io/tags/windows/</guid>
       <description></description>
     </item>
     <item>
@@ -2456,13 +2470,6 @@
       <link>https://imlauera.github.io/tags/doom/</link>
       <pubDate>Tue, 19 Sep 2023 11:46:03 -0300</pubDate>
       <guid>https://imlauera.github.io/tags/doom/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Arduino</title>
-      <link>https://imlauera.github.io/tags/arduino/</link>
-      <pubDate>Wed, 12 Jul 2023 02:26:15 -0300</pubDate>
-      <guid>https://imlauera.github.io/tags/arduino/</guid>
       <description></description>
     </item>
     <item>
