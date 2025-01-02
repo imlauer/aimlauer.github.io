@@ -6,8 +6,15 @@
     <description>Recent content on Imlauer</description>
     <generator>Hugo</generator>
     <language>es-es</language>
-    <lastBuildDate>Thu, 02 Jan 2025 11:39:01 -0300</lastBuildDate>
+    <lastBuildDate>Thu, 02 Jan 2025 17:50:43 -0300</lastBuildDate>
     <atom:link href="https://imlauera.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Ver cualquier cámara sin aplicación móvil sólo con MPV</title>
+      <link>https://imlauera.github.io/ver_cualquier_camara_sin_aplicacion/</link>
+      <pubDate>Thu, 02 Jan 2025 17:50:43 -0300</pubDate>
+      <guid>https://imlauera.github.io/ver_cualquier_camara_sin_aplicacion/</guid>
+      <description>&lt;p&gt;Primero tenemos que saber cual es la IP de la cámara para eso podemos bajarnos una aplicación de visor de cámaras en el celular o escanear las IPs con nmap o con un escaner de IPs en Windows como Advanced IP Scanner.&lt;/p&gt;&#xA;&lt;p&gt;Cuando identificamos la IP de la cámara, tenemos que saber su usuario y contraseña para saber esta información si tendremos que bajar la aplicación pero solo 1 vez.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Arduino: Como enviar foto por SMTP y solucionar problema de conexión USB en Windows</title>
       <link>https://imlauera.github.io/arduino_enviar_foto_por_smtp_reinstalar_drivers_windows/</link>
