@@ -2,13 +2,25 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://imlauera.github.io/tags/camera/</loc>
-    <lastmod>2025-01-02T17:50:43-03:00</lastmod>
+    <loc>https://imlauera.github.io/tags/estructura/</loc>
+    <lastmod>2025-01-04T19:18:02-03:00</lastmod>
   </url><url>
     <loc>https://imlauera.github.io/</loc>
-    <lastmod>2025-01-02T17:50:43-03:00</lastmod>
+    <lastmod>2025-01-04T19:18:02-03:00</lastmod>
+  </url><url>
+    <loc>https://imlauera.github.io/reversing_simple_estructura/</loc>
+    <lastmod>2025-01-04T19:18:02-03:00</lastmod>
   </url><url>
     <loc>https://imlauera.github.io/tags/</loc>
+    <lastmod>2025-01-04T19:18:02-03:00</lastmod>
+  </url><url>
+    <loc>https://imlauera.github.io/tags/arduino/</loc>
+    <lastmod>2025-01-04T17:33:01-03:00</lastmod>
+  </url><url>
+    <loc>https://imlauera.github.io/esp32_con_3g_4g/</loc>
+    <lastmod>2025-01-04T17:33:01-03:00</lastmod>
+  </url><url>
+    <loc>https://imlauera.github.io/tags/camera/</loc>
     <lastmod>2025-01-02T17:50:43-03:00</lastmod>
   </url><url>
     <loc>https://imlauera.github.io/ver_cualquier_camara_sin_aplicacion/</loc>
@@ -1823,9 +1835,6 @@
     <loc>https://imlauera.github.io/tags/datos/</loc>
     <lastmod>2024-07-15T23:37:47-03:00</lastmod>
   </url><url>
-    <loc>https://imlauera.github.io/tags/estructura/</loc>
-    <lastmod>2024-07-15T23:37:47-03:00</lastmod>
-  </url><url>
     <loc>https://imlauera.github.io/post/ffmpeg_audio_to_mp4/</loc>
     <lastmod>2024-07-13T22:04:45-03:00</lastmod>
   </url><url>
@@ -2245,9 +2254,6 @@
   </url><url>
     <loc>https://imlauera.github.io/post/irssi_autojoin/</loc>
     <lastmod>2023-09-08T20:00:49-03:00</lastmod>
-  </url><url>
-    <loc>https://imlauera.github.io/tags/arduino/</loc>
-    <lastmod>2023-07-12T02:26:15-03:00</lastmod>
   </url><url>
     <loc>https://imlauera.github.io/post/arduino-cli-how-to/</loc>
     <lastmod>2023-07-12T02:26:15-03:00</lastmod>

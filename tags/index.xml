@@ -6,8 +6,22 @@
     <description>Recent content in Tags on Imlauer</description>
     <generator>Hugo</generator>
     <language>es-es</language>
-    <lastBuildDate>Thu, 02 Jan 2025 17:50:43 -0300</lastBuildDate>
+    <lastBuildDate>Sat, 04 Jan 2025 19:18:02 -0300</lastBuildDate>
     <atom:link href="https://imlauera.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Estructura</title>
+      <link>https://imlauera.github.io/tags/estructura/</link>
+      <pubDate>Sat, 04 Jan 2025 19:18:02 -0300</pubDate>
+      <guid>https://imlauera.github.io/tags/estructura/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Arduino</title>
+      <link>https://imlauera.github.io/tags/arduino/</link>
+      <pubDate>Sat, 04 Jan 2025 17:33:01 -0300</pubDate>
+      <guid>https://imlauera.github.io/tags/arduino/</guid>
+      <description></description>
+    </item>
     <item>
       <title>Camera</title>
       <link>https://imlauera.github.io/tags/camera/</link>
@@ -1899,13 +1913,6 @@
       <description></description>
     </item>
     <item>
-      <title>Estructura</title>
-      <link>https://imlauera.github.io/tags/estructura/</link>
-      <pubDate>Mon, 15 Jul 2024 23:37:47 -0300</pubDate>
-      <guid>https://imlauera.github.io/tags/estructura/</guid>
-      <description></description>
-    </item>
-    <item>
       <title>Mutt-Wizard</title>
       <link>https://imlauera.github.io/tags/mutt-wizard/</link>
       <pubDate>Wed, 10 Jul 2024 03:12:27 -0300</pubDate>
@@ -2470,13 +2477,6 @@
       <link>https://imlauera.github.io/tags/doom/</link>
       <pubDate>Tue, 19 Sep 2023 11:46:03 -0300</pubDate>
       <guid>https://imlauera.github.io/tags/doom/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>Arduino</title>
-      <link>https://imlauera.github.io/tags/arduino/</link>
-      <pubDate>Wed, 12 Jul 2023 02:26:15 -0300</pubDate>
-      <guid>https://imlauera.github.io/tags/arduino/</guid>
       <description></description>
     </item>
     <item>
