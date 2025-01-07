@@ -2,17 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://imlauera.github.io/tags/android/</loc>
+    <lastmod>2025-01-07T12:40:03-03:00</lastmod>
+  </url><url>
     <loc>https://imlauera.github.io/</loc>
-    <lastmod>2025-01-05T09:38:16-03:00</lastmod>
+    <lastmod>2025-01-07T12:40:03-03:00</lastmod>
+  </url><url>
+    <loc>https://imlauera.github.io/montar_android_como_almacenamiento_usb/</loc>
+    <lastmod>2025-01-07T12:40:03-03:00</lastmod>
   </url><url>
     <loc>https://imlauera.github.io/tags/</loc>
-    <lastmod>2025-01-05T09:38:16-03:00</lastmod>
+    <lastmod>2025-01-07T12:40:03-03:00</lastmod>
   </url><url>
-    <loc>https://imlauera.github.io/tags/televisores/</loc>
-    <lastmod>2025-01-05T09:38:16-03:00</lastmod>
+    <loc>https://imlauera.github.io/correos_sin_numero_de_telefono/</loc>
+    <lastmod>2025-01-06T19:08:03-03:00</lastmod>
   </url><url>
-    <loc>https://imlauera.github.io/televisores1/</loc>
-    <lastmod>2025-01-05T09:38:16-03:00</lastmod>
+    <loc>https://imlauera.github.io/tags/espionaje/</loc>
+    <lastmod>2025-01-06T19:08:03-03:00</lastmod>
   </url><url>
     <loc>https://imlauera.github.io/tags/estructura/</loc>
     <lastmod>2025-01-04T19:18:02-03:00</lastmod>
@@ -169,9 +175,6 @@
   </url><url>
     <loc>https://imlauera.github.io/clase20_aires/</loc>
     <lastmod>2024-11-30T12:29:38-03:00</lastmod>
-  </url><url>
-    <loc>https://imlauera.github.io/tags/android/</loc>
-    <lastmod>2024-11-30T02:32:23-03:00</lastmod>
   </url><url>
     <loc>https://imlauera.github.io/android_casi_brikeado/</loc>
     <lastmod>2024-11-30T02:32:23-03:00</lastmod>
@@ -2691,5 +2694,9 @@
     <loc>https://imlauera.github.io/post/sobre-vpns/</loc>
   </url><url>
     <loc>https://imlauera.github.io/tags/svelte3/</loc>
+  </url><url>
+    <loc>https://imlauera.github.io/tags/televisores/</loc>
+  </url><url>
+    <loc>https://imlauera.github.io/televisores1/</loc>
   </url>
 </urlset>
