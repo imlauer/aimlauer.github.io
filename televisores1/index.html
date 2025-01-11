@@ -27,7 +27,7 @@ Este bloque de pantalla es para que ella dibuje la imágen.
 La información de la imágen proviene de un 3er bloque llamado VIDEO.
 Además de video tenemos audio tenemos que agregar el bloque para el audio.
 Luego el video proviene de un bloque llamado sinto (sintonizaador), el sintonizador captura señales de televisor por aire y por cable tenemos una fuente de audio y video.">
-  <meta itemprop="wordCount" content="9407">
+  <meta itemprop="wordCount" content="10795">
   <meta itemprop="keywords" content="Televisores">
   
   <meta name="twitter:card" content="summary">
@@ -418,6 +418,60 @@ Lo hemos conectado a una serie encendió unos instantes y luego se apagó, encen
 <p>Si hemos llegado a este punto y el televisor no nos prende podemos descartar gran parte de la falla a la fuente. No podemos descartarla del todo porque puede haber alguna de la fuente fallada pero por lo menos esta que corresponde a la parte caliente de la fuente y gran parte de la sesión secundaria de la fuente nos indica al tomar esta lectura de que está trabajando la fuente y que por lo menos el microprocesador está energizado y probablemente listo para recibir ordenes.</p>
 <p>Luego estudiaremos la situación en que enfrentaremos como enfrentar ese tipo de falla.</p>
 <p>Vamos a retomar el caso en cuando la serie se nos quede encendida y no se apaga aunque tenga la bobina desmagnetizadora desconectada porque es el caso que nos aplica en este módulo es aprender toda la parte primaria de la fuente.</p>
+<h3 id="video-16">Video 16</h3>
+<p>Cuando recibimos un televisor lo primero a comprobar es la fuente de pantalla porque cuando el usuario presiona la tecla power hay un circuito que debe estar eternamente energizado, ese circuito es conformado por el microprocesador la memoria el teclado y el sensor de remoto.</p>
+<p>Tenemos el micro, la memoria, el sensor remoto, y tenemos el teclado.</p>
+<p>Tanto el micro como la memoria y el sensor remoto trabajan con la misma de alimentación de 5 voltios si se trata de un televisor viejo. O si se trata de un televisor de última generación 3,3 voltios.</p>
+<p>Ese voltaje se conoce como standby que cuando falta o si no está en correctas condiciones el aparato no funciona.</p>
+<p>En el pin 8 de la memoria con respecto a la tierra fría.</p>
+<p>Si efectivamente no hay voltaje de standby. Debemos identificar esta fuente teniendo presente que puede estar en dos posibles configuraciones que pueden confundir:</p>
+<ol>
+<li>Integrada en la fuente principal: el único transformador chopper se saca también el voltaje de standby.</li>
+<li>Independiente de la fuente principal: Tiene un circuito con su propio transformador chopper generalmente de tamaño pequeño con el cual se obtiene el voltaje de standby.</li>
+</ol>
+<p>El no tenerlo en cuenta pudiera causar dificultad ubicarlo.</p>
+<p>Aunque esto solo se ve en pocas marcas y modelos.</p>
+<p>Observen lo siguiente: entrada de AC los filtros de ruido y acá tenemos el transformador chopper principal que si lo miramos físicamente es un transformador grande pero acá hay un transformador secundario chopper standby. 5 voltios de standby salen de esta configuración este transistor MOSFET(oscilador) <strong>es un transformador pequeño que solo entrega los 5 voltios</strong>, mientras eso no trabaje entonces el televisor estará completamente inoperante.</p>
+<p>Observa que acá hay un relevo con relay. A veces confundimos ese sonido de relevo cuando le damos la orden power lo confundimos con otro relay. En los televisores algunos traen doble relay uno para la bobina desmagnetizadora y otra para la bobina principal.</p>
+<p>Este relevo mientras no se cierre no alimentará o llevará voltaje al puente rectificador que viene a ser el principal para alimentar toda la etapa de potencia de la fuente principal del televisor. La pregunta es <strong>quién comanda este relay?</strong> debe haber una energía antes de esto.</p>
+<p>El microprocesador comanda el relay pero esta parte debe estar energizado con la fuente standby.</p>
+<p>Entrada AC las dos líneas acá hay un juego de rectificadores un filtro principal y acá está el circuito de standby esos pocos elementos hacen que este transformador chopper transfiera energía que al rectificarla nos entrega un voltaje superior a los 5 voltios con el diodo regulador de 5 voltios en 3 entradas una de entrada, la tierra y la de salida aparecen los 5 voltios de standby para el microprocesador.</p>
+<p>Reparar este tipo de fuentes de standby es más fácil, consiste en menos componentes y un transformador chopper más chico con una sola salida a la que llega 9 voltios.</p>
+<p>Estos desvanados acá secundarios son para crear la oscilación y un autoalimentación y un autocontrol acá está la parte primaria.</p>
+<p>El secundario es el que entrega el voltaje que es convertido en el voltaje de standby cuando está integrada la fuente de standby es más complejo. (Minuto 10:40) porque ya son multiples salidas, una falla en una de ellas puede transtornar incluyendo la de standby.</p>
+<p>Para poner un ejemplo es cuando el transistor HOT se pone en corto. La fuente arranca desde el corto y se protege por sobrecorriente, bajo esa condición la fuente puede presentar varios síntomas:</p>
+<ol>
+<li>Led frontal piloto titilando (flasheando): se confirma con cualquiera de los voltajes fluctluantes a la salida.</li>
+<li>Son tan bajos los voltajes entregados que no alcanza a encender, sin embargo se puede llegar a escuchar la oscilación como un grillo.</li>
+</ol>
+<h4 id="cuando-el-voltaje-standby-es-correcto-pero-el-televisor-no-enciende">Cuando el voltaje standby es correcto pero el televisor no enciende.</h4>
+<p>La falla no está en la fuente.</p>
+<p>Cuando el voltaje entregado es muy bajo no debemos concluir que hay falla en la fuente, a no ser que se trate de la fuente standby.</p>
+<p>Si chequear sin el diagrama, ocurre algún cambio en la fuente secundaria al momento de dar la orden de power, si ocurre es porque el microprocesador está dando la orden correctamente.</p>
+<p>Fallas frecuentes: filtros.</p>
+<p>Cuando los voltajes se bajan es causado por un mal filtrado.</p>
+<p>Para chequear filtros es engorroso hay que desoldar 1 a 1 porque nos dan una medida errónea.</p>
+<p>Otro es cambiarlo por descarte.</p>
+<p>Capacheck (Minuto 18) si le interesa como medir.</p>
+<h3 id="veremos-el-caso-cuando-los-voltajes-son-fluctuantes-entonces-significa-que-hay-una-sobrecarga-en-una-de-las-fuentes-o-la-fuente-se-encuentra-sin-control-de-voltaje-entonces-arranca-se-desboca-y-se-apaga-se-protege">Veremos el caso cuando los voltajes son fluctuantes. Entonces significa que hay una sobrecarga en una de las fuentes o la fuente se encuentra sin control de voltaje entonces arranca se desboca y se apaga se protege.</h3>
+<p>Tenemos el diagrama de un televisor chino.</p>
+<p>Acá tenemos la parte primaria (CALIENTE) ya estudiamos los transistores MOSFET.</p>
+<p>Acá tenemos la parte secundaria para efectos de mejor calidad de imagen voy a hacer uso del diagrama original.</p>
+<p>Ahora nos vamos a centrar en la parte de control.</p>
+<p>Minuto 21:30: Esta es la parte secundaria la salida de los 12 voltios, la salida de 9 voltios y acá tenemos un regulador de 12.</p>
+<p>Este transistor Q212 en condiciones normales que en su base son transistores digitales por eso aparecen estas resistencias.</p>
+<p>Este transistor de referencia C124 por su base en condiciones de standby no hay voltaje por lo tanto estos 5 voltios de standby pasan a la base de este Q211 quiere decir que estará activo por lo tanto el voltaje que pudiera haber en la base del Q832 estará aterrizado.</p>
+<p>En la base del Q832 no hay voltaje y por lo tanto este transistor estará inactivo, quiere decir que estos 8 voltios que salen de la fuente y polarizan este diodo led que en realidad es la mitad del optoacoplador está una primera parte 802.</p>
+<p>IC802 le informa al integrado un cambio al estar este optoacoplador apagado por lo tanto acá el fototransistor que estará dentro del optoacoplador también estará apagado, también estará dentro. Eso le indica al integrado modulador de ancho de pulsos que trabaje en modo de espera normalmente lo que hace es que aumenta la frecuencia entrega unos pulsos muy angostos con el fin de que la corriente transferida sea muy baja.</p>
+<p>Sus voltajes secundarios estarán por debajo del nominal, acá no van a ver 12 voltios sino que 6 voltios.</p>
+<p>Acá no habrán los 106 sino que habrán 80 voltios menos y así con todos los voltajes.</p>
+<p>Sin embargo vale la pena resaltar que acá si saldrán los 8 voltios y más adelante vamos.</p>
+<p>Cuando la fuente está en modo de espera en estas condiciones está el micro alimentado si le damos la orden de encendido el va a entregarle al Q212 transistor 5 voltios, en realidad no porque le entrega el micro por su puerto en el PIN que corresponde a la salida power acá no llegan 5 voltios porque hay una resistencia en el camino para que llegue .7 voltios que es lo que necesita el transistor para activarse.</p>
+<p>Lo que sucede es que cuando el televisor recibe la orden de encendido el micro interpreta esa orden y entra 5 voltios con los cuales llegan acá .7 el transistor Q12 ya aterriza este voltaje, por lo tanto Q12 ya al estar su base en 0 voltios entonces el deja de trabajar y el voltaje que pasa por acá ya le llega al Q832 sucede que él va a trabajar, al trabajar es como que acá se cerrara entonces el LED el interno optoacoplador se va a encender cuando el se enciende entonces el optoacoplador y el fototransistor va a conducir cuando él conduce, cuando el cierra su juntura colector emisor a través de la resistencia le dice al integrado IC801 por el PIN 3 a trabajar mi amigo XD.</p>
+<p>Lo que hace es ampliar los pulsos con el fin de que acá haya más transferencia de energía, al haber más transferencia de energía los voltajes se normalizan. Acá aparecen los 12 voltios acá los 206 y así con los demás.</p>
+<p>Es la manera de como se hace la conmutación de la fuente cuando se trabaja en ráfaga a cuando trabaja a pleno.</p>
+<h4 id="video-17">Video 17.</h4>
+<p>Transistores: Q211 Q212 Q832, el LED simula el optoacoplador: es el que hace los cambios. En modo standby los 5 voltios no le llegan a la base del Q212.</p>
 
 </div>
 
