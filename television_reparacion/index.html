@@ -25,7 +25,7 @@ Le cambiamos el transistor del switching y el integrado(oscilador) pero igual no
 Integrado (oscilador): TEA1507 Transistor: 15
 En la proveduría electrónica.
 El fayback es una fuente de alta tensin para el horizontal tambien se usa para la fuente. El fayback es una fuente switching usa eso para hacer la fuente que usa para el standby.">
-  <meta itemprop="wordCount" content="576">
+  <meta itemprop="wordCount" content="904">
   <meta itemprop="keywords" content="Marcelo">
   
   <meta name="twitter:card" content="summary">
@@ -138,6 +138,7 @@ Necesita 12 vopltios para el barrido horizontal de 15 725 hertz, que es  la frec
 <p><strong>Cuando se encuentran con que el aparato no arranca</strong>, y el técnico capacitado les dice que desconecten la etapa horizontal y carguen la fuente con una lámpara, vean en el ejemplo dónde se debe interrumpir la alimentación del fly-back, y colocar entre ese punto,que es el pin de entrada al bobinado primario del mismo, la lámpara de 60 watts con el otro extremo a masa del fly-back y NO en ningún otro lugar, o sea, en el punto indicado con una X y masa es donde deben medir la tensión de la fuente y/ó colocar la carga.</p>
 <p>Hay que medir con el oscilospico porque hay que ver la forma de onda aparte eso arruina el tester.</p>
 <p>Si alguno de ustedes ahorró y pudo llegar a comprar el osciloscopio, pueden ver en el diagrama, dentro de los recuadros verde limón los oscilogramas ó formas de onda en los puntos clave de la etapa de salida horizontal a saber: 1 es la forma de onda en la base del transistor driver, o sea la señal que viene del jungla, para determinar si el transistor está funcionando, deberíamos ver la forma de onda 2, en el colector del driver, siguiendo con la forma de onda en la base del transistor de salida horizontal, 3, y por último, la forma de onda en el colector del transistor de salida, 4, pulso horizontal donde NO deben medir con tester ó multímetro, sólo con el osciloscopio con la punta adecuada en atenuación.</p>
+<p>Si les piden que verifiquen los capacitores de sintonía del horizontal y el filtro del driver, los encuentran dentro de un círculo en el diagrama de ejemplo en color rojo.</p>
 <p>Fuente: <a href="https://tecnicosaurios.com/foro/viewtopic.php?f=90&amp;t=7842">https://tecnicosaurios.com/foro/viewtopic.php?f=90&amp;t=7842</a></p>
 <hr>
 <h5 id="diferentes-publicaciones-de-problemas-similares-a-este-el-standby-no-enciende">Diferentes publicaciones de problemas similares a este: el standby no enciende:</h5>
@@ -157,6 +158,21 @@ Necesita 12 vopltios para el barrido horizontal de 15 725 hertz, que es  la frec
 <p><a href="https://tecnicosaurios.com/foro/viewtopic.php?f=90&amp;t=53098">https://tecnicosaurios.com/foro/viewtopic.php?f=90&amp;t=53098</a></p>
 <p><a href="https://tecnicosaurios.com/foro/viewtopic.php?f=90&amp;t=52506">https://tecnicosaurios.com/foro/viewtopic.php?f=90&amp;t=52506</a></p>
 <p><a href="https://tecnicosaurios.com/foro/viewtopic.php?f=90&amp;t=51912">https://tecnicosaurios.com/foro/viewtopic.php?f=90&amp;t=51912</a></p>
+<hr>
+<p>Teoría (Hasta la línea 763 de un archivo de 31834 líneas): <a href="https://www.revisely.com/quiz/CsjlEu">https://www.revisely.com/quiz/CsjlEu</a></p>
+<p><img src="/files/todo_televisores.txt" alt="Archivo de subtitulo de un canal de Reparación de Televisores en YouTube"></p>
+<hr>
+<p>Anécdotas encontradas:
+<a href="https://www.facebook.com/yoyneersalinas06/posts/reparaci%C3%B3n-de-televisor-phillips-chassis-l03-2l-aafalla-el-televisor-no-enciende/1198030507005933/">https://www.facebook.com/yoyneersalinas06/posts/reparaci%C3%B3n-de-televisor-phillips-chassis-l03-2l-aafalla-el-televisor-no-enciende/1198030507005933/</a></p>
+<p><strong>Reparación de televisor Phillips chassis L03 2L AA.</strong></p>
+<p>Falla: el televisor no enciende, al conectarlo a la red eléctrica no se percibe ningún sonido ni ningún signo de vida, es decir, &ldquo;totalmente muerto&rdquo;.
+el cliente alega (molesto) que lo había llevado a un servicio técnico de acá del centro de mi ciudad y le habían mandado a comprar un flyback nuevo y resulta que no funciono y el cliente estaba molesto porque perdió dinero allí.
+1.) al abrir el receptor, vi en muy buen estado los componentes al igual que las soldaduras.
+2.)se procedió a tomar lectura de tensión en 3 puntos vitales del televisor (filtro principal,+ B, sistema de control).
+3. en el filtro principal se encontró 160v ( OK), en el sistema de control, específicamente en la pata 8 de la memoria eeprom se encontró 5v (OK), PERO  en el pin + B del transformador de lineas/flyback había 0v.
+4.se tomo lecturas en escala de diodos en la linea de +B no se hallaron cortos PERO en el C2564 ESTA VEZ EN ESCALA D.C si se hallo el voltaje correspondiente de +B para este modelo el cual en stanby es de 98v y al encender el televisor sube a 110v.
+5. ¿ EL CULPABLE ? bobina 5563 ABIERTA,  que esta en serie en la linea de + B
+TAL VEZ UNA REPARACIÓN no muy difícil y para algunos aburrida, PERO RECUERDEN QUE NO QUIERO QUE VEAN SOLAMENTE COMO SE REPARA UN ARTEFACTO ELECTRÓNICO, SI NO TAMBIÉN EL PROCEDIMIENTO QUE SE LLEVA A CABO, HAY QUE ANALIZAR, LEER, ESTUDIAR, APRENDER PARA ASÍ NO HACER INVERTIR AL CLIENTE EN VANO Y PERDER NUESTRO VALIOSO TIEMPO. ANIMO Y ESPERO QUE LES SEA DE AYUDA.</p>
 
 </div>
 
