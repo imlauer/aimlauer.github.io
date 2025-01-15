@@ -34,7 +34,7 @@ Me compré una cámara ESP32 CAM de MercadoLibre y seguí esta guía para subir 
 Se usa google script. Hice un pequeño cambio en el código agregué sensores para que la cámara tenga una mejor calidad cuando hay mucha luz o poca luz y forcé el http en lugar del https porque no funcionaba con el siguiente parámetro: client.setInsecure();">
   <meta itemprop="datePublished" content="2023-11-10T04:51:54-03:00">
   <meta itemprop="dateModified" content="2023-11-10T04:51:54-03:00">
-  <meta itemprop="wordCount" content="1557">
+  <meta itemprop="wordCount" content="1743">
   <meta itemprop="keywords" content="Esp32,Capturas,Webcam,Google,Drive">
   
   <meta name="twitter:card" content="summary">
@@ -215,7 +215,54 @@ Base64.cpp <a href="https://archive.is/I8sdh">https://archive.is/I8sdh</a></p>
 <p>Para compilar <code>Ctrl+R</code>, para compilar y subir el programa <code>Ctrl+U</code></p>
 <p>A veces cuando intentás cargar falla la carga un truco que me funcionaba era cambiar la velocidad de serie compilar sin subir y cambiarlo de nuevo a la que estaba antes y ahí sí compilar y subirlo</p>
 <p>Así me quedó el código (tenés que descargar las bibliotecas base64.cpp y base64.h y ponerlas en la misma carpeta como se mencionó anteriormente sino no compilará):</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;WiFi.h&gt;</span><span style="color:#75715e">
+<pre tabindex="0"><code>Este código:
+
+1. No soporta HTTPS y hay que agregar el client.setInsecure(); que no es recomendable por ataques de hombre en el medio aparte en un futuro quedará obsoleto.
+2. El WiFi SE VA A DESCONECTAR y hay que programar la reconexión está mal poner el WiFi.begin AFUERA 
+ [code]
+WiFi.begin(ssid, password);  
+  while (WiFi.status() != WL_CONNECTED) {
+    Serial.print(&#34;.&#34;);
+    delay(500);
+  }
+[/code] Eso está mal.
+Y dentro del loop tenés que chequear si el WiFi se volvió a desconectar:
+
+Debería ser :
+
+[code]
+void connectWiFi()
+{
+  int status = WL_IDLE_STATUS;
+  
+  while (status != WL_CONNECTED)
+  {
+    status = WiFi.begin(ssid, password);
+    Serial.println(&#34;Connecting to WiFi...&#34;);
+    Serial.print(&#34;.&#34;);
+    delay(300);
+  }
+
+  Serial.print(&#34; IP: &#34;);
+  Serial.println(WiFi.localIP());
+  Serial.println();
+}
+void check_WiFi()
+{
+  if ( (WiFi.status() != WL_CONNECTED) )
+  {
+    Serial.println(F(&#34;\nWiFi lost. Call connectMultiWiFi in loop&#34;));
+    connectWiFi();
+  }
+}
+[/code]
+
+El WiFi.begin tiene que estar dentro del loop while.
+
+Y dentro de loop() hay que llamar a check_WiFi()
+
+Algo así: https://forum.arduino.cc/t/arduino-wifi-rev2-reconnecting-to-wifi-after-disconnected/1022789/5
+</code></pre><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;WiFi.h&gt;</span><span style="color:#75715e">
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;WiFiClientSecure.h&gt;</span><span style="color:#75715e">
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;soc/soc.h&#34;</span><span style="color:#75715e">
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;soc/rtc_cntl_reg.h&#34;</span><span style="color:#75715e">
@@ -253,30 +300,46 @@ Base64.cpp <a href="https://archive.is/I8sdh">https://archive.is/I8sdh</a></p>
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e">#define HREF_GPIO_NUM     23
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e">#define PCLK_GPIO_NUM     22
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">connectWiFi</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">int</span> status <span style="color:#f92672">=</span> WL_IDLE_STATUS;
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">while</span> (status <span style="color:#f92672">!=</span> WL_CONNECTED)
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    status <span style="color:#f92672">=</span> WiFi.<span style="color:#a6e22e">begin</span>(ssid, password);
+</span></span><span style="display:flex;"><span>    Serial.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;Connecting to WiFi...&#34;</span>);
+</span></span><span style="display:flex;"><span>    Serial.<span style="color:#a6e22e">print</span>(<span style="color:#e6db74">&#34;.&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">delay</span>(<span style="color:#ae81ff">300</span>);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  Serial.<span style="color:#a6e22e">print</span>(<span style="color:#e6db74">&#34; IP: &#34;</span>);
+</span></span><span style="display:flex;"><span>  Serial.<span style="color:#a6e22e">println</span>(WiFi.<span style="color:#a6e22e">localIP</span>());
+</span></span><span style="display:flex;"><span>  Serial.<span style="color:#a6e22e">println</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">check_WiFi</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> ( (WiFi.<span style="color:#a6e22e">status</span>() <span style="color:#f92672">!=</span> WL_CONNECTED) )
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>    Serial.<span style="color:#a6e22e">println</span>(<span style="color:#a6e22e">F</span>(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">WiFi lost. Call connectMultiWiFi in loop&#34;</span>));
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">connectWiFi</span>();
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setup</span>()
 </span></span><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">WRITE_PERI_REG</span>(RTC_CNTL_BROWN_OUT_REG, <span style="color:#ae81ff">0</span>);
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>  Serial.<span style="color:#a6e22e">begin</span>(<span style="color:#ae81ff">115200</span>);
-</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">delay</span>(<span style="color:#ae81ff">10</span>);
-</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">delay</span>(<span style="color:#ae81ff">1000</span>); <span style="color:#75715e">// 1 segundo.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
 </span></span><span style="display:flex;"><span>  WiFi.<span style="color:#a6e22e">mode</span>(WIFI_STA);
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>  Serial.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;&#34;</span>);
 </span></span><span style="display:flex;"><span>  Serial.<span style="color:#a6e22e">print</span>(<span style="color:#e6db74">&#34;Connecting to &#34;</span>);
 </span></span><span style="display:flex;"><span>  Serial.<span style="color:#a6e22e">println</span>(ssid);
-</span></span><span style="display:flex;"><span>  WiFi.<span style="color:#a6e22e">begin</span>(ssid, password);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">while</span> (WiFi.<span style="color:#a6e22e">status</span>() <span style="color:#f92672">!=</span> WL_CONNECTED) {
-</span></span><span style="display:flex;"><span>    Serial.<span style="color:#a6e22e">print</span>(<span style="color:#e6db74">&#34;.&#34;</span>);
-</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">delay</span>(<span style="color:#ae81ff">500</span>);
-</span></span><span style="display:flex;"><span>  }
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  Serial.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;&#34;</span>);
-</span></span><span style="display:flex;"><span>  Serial.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;STAIP address: &#34;</span>);
-</span></span><span style="display:flex;"><span>  Serial.<span style="color:#a6e22e">println</span>(WiFi.<span style="color:#a6e22e">localIP</span>());
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  Serial.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;&#34;</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">connectWiFi</span>();
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">camera_config_t</span> config;
 </span></span><span style="display:flex;"><span>  config.ledc_channel <span style="color:#f92672">=</span> LEDC_CHANNEL_0;
@@ -345,6 +408,7 @@ Base64.cpp <a href="https://archive.is/I8sdh">https://archive.is/I8sdh</a></p>
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">saveCapturedImage</span>();
 </span></span><span style="display:flex;"><span>    enviar <span style="color:#f92672">=</span> false;
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">delay</span>(<span style="color:#ae81ff">300000</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">check_WiFi</span>();
 </span></span><span style="display:flex;"><span>  <span style="color:#75715e">//}
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
 </span></span><span style="display:flex;"><span>
