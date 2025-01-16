@@ -2,16 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://imlauera.github.io/convertir_docx_a_imagenes/</loc>
+    <lastmod>2025-01-16T06:57:22-03:00</lastmod>
+  </url><url>
+    <loc>https://imlauera.github.io/</loc>
+    <lastmod>2025-01-16T06:57:22-03:00</lastmod>
+  </url><url>
+    <loc>https://imlauera.github.io/tags/pandoc/</loc>
+    <lastmod>2025-01-16T06:57:22-03:00</lastmod>
+  </url><url>
+    <loc>https://imlauera.github.io/tags/</loc>
+    <lastmod>2025-01-16T06:57:22-03:00</lastmod>
+  </url><url>
     <loc>https://imlauera.github.io/tags/choice/</loc>
     <lastmod>2025-01-13T21:22:41-03:00</lastmod>
   </url><url>
-    <loc>https://imlauera.github.io/</loc>
-    <lastmod>2025-01-13T21:22:41-03:00</lastmod>
-  </url><url>
     <loc>https://imlauera.github.io/multiple_choice_reversing/</loc>
-    <lastmod>2025-01-13T21:22:41-03:00</lastmod>
-  </url><url>
-    <loc>https://imlauera.github.io/tags/</loc>
     <lastmod>2025-01-13T21:22:41-03:00</lastmod>
   </url><url>
     <loc>https://imlauera.github.io/tags/index/</loc>
@@ -2625,9 +2631,6 @@
     <lastmod>2020-12-31T10:39:57-03:00</lastmod>
   </url><url>
     <loc>https://imlauera.github.io/tags/navegador/</loc>
-    <lastmod>2020-12-31T10:39:57-03:00</lastmod>
-  </url><url>
-    <loc>https://imlauera.github.io/tags/pandoc/</loc>
     <lastmod>2020-12-31T10:39:57-03:00</lastmod>
   </url><url>
     <loc>https://imlauera.github.io/tags/powerpoint/</loc>
